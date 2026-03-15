@@ -1,7 +1,10 @@
+const COLS = 10;
+const ROWS = 20;
+
 class Board {
   constructor() {
-    this.rows = 20;
-    this.cols = 10;
+    this.rows = ROWS;
+    this.cols = COLS;
     this.grid = [];
     this.reset();
   }
