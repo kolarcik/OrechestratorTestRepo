@@ -1,0 +1,55 @@
+@using TetrisBlazor.Client.GameLogic
+@using TetrisBlazor.Shared
+
+<div class="sidebar-panel">
+    <div class="sidebar-section">
+        <div class="label">NEXT</div>
+        <div class="next-piece-grid" style="grid-template-columns: repeat(@_nextCols, 24px); grid-template-rows: repeat(@_nextRows, 24px); width: @(_nextCols * 24)px; height: @(_nextRows * 24)px;">
+            @if (NextPiece != null)
+            {
+                @for (int r = 0; r < NextPiece.Shape.GetLength(0); r++)
+                {
+                    @for (int c = 0; c < NextPiece.Shape.GetLength(1); c++)
+                    {
+                        var row = r; var col = c;
+                        var filled = NextPiece.Shape[row, col] != 0;
+                        <div class="next-cell @(filled ? "filled" : "")"
+                             style="@(filled ? $"background:{NextPiece.Color};" : "")">
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+
+    <div class="sidebar-section">
+        <div class="label">SCORE</div>
+        <div class="value">@ScoreManager.Score</div>
+        <div class="label">LEVEL</div>
+        <div class="value">@ScoreManager.Level</div>
+        <div class="label">LINES</div>
+        <div class="value">@ScoreManager.Lines</div>
+    </div>
+
+    @if (Leaderboard.Count > 0)
+    {
+        <div class="sidebar-section">
+            <div class="label">TOP SCORES</div>
+            <ol class="leaderboard">
+                @foreach (var entry in Leaderboard.Take(10))
+                {
+                    <li><span>@entry.Name</span><span class="score-val">@entry.Score</span></li>
+                }
+            </ol>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public ScoreManager ScoreManager { get; set; } = default!;
+    [Parameter] public Tetromino? NextPiece { get; set; }
+    [Parameter] public List<ScoreEntry> Leaderboard { get; set; } = [];
+
+    private int _nextRows => NextPiece?.Shape.GetLength(0) ?? 4;
+    private int _nextCols => NextPiece?.Shape.GetLength(1) ?? 4;
+}
