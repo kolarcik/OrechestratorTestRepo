@@ -1,18 +1,24 @@
-# Tetris
+# Tetris – Blazor .NET
 
-Webová hra Tetris ovládaná klávesnicí s online leaderboardem.
+Webová hra Tetris v Blazor WebAssembly ovládaná klávesnicí s online leaderboardem.
+
+## Architektura
+
+```
+TetrisBlazor.slnx
+├── TetrisBlazor.Server/    # ASP.NET Core – hostuje hru + Scores REST API
+├── TetrisBlazor.Client/    # Blazor WebAssembly – herní logika + UI
+└── TetrisBlazor.Shared/    # Sdílené modely (ScoreEntry, ScoreSubmission)
+```
 
 ## Spuštění
 
-### Frontend (hra)
-Otevři `index.html` přímo v prohlížeči – hra funguje i bez backendu.
-
-### Backend (high scores API)
 ```bash
-npm install
-node server.js
+cd TetrisBlazor.Server
+dotnet run
 ```
-Server běží na `http://localhost:3000`.
+
+Hra běží na `http://localhost:5XXX` (viz výstup konzole).
 
 ## Ovládání
 
@@ -41,16 +47,22 @@ Server běží na `http://localhost:3000`.
 ## Struktura projektu
 
 ```
-index.html          # Hlavní stránka hry
-style.css           # Styly
-js/
-  tetromino.js      # Definice a rotace tetrominů
-  board.js          # Herní pole, kolize, mazání řádků
-  renderer.js       # Canvas vykreslování
-  input.js          # Klávesové ovládání s DAS
-  score.js          # Skórování a levely
-  ui.js             # Overlay obrazovky (start, pauza, game over)
-  game.js           # Hlavní herní smyčka
-server.js           # Express REST API
-scores.json         # Perzistentní úložiště skóre
+TetrisBlazor.Client/
+  GameLogic/
+    Tetromino.cs        # 7 tetrominů, rotace CW/CCW
+    Board.cs            # 10×20 pole, kolize, mazání řádků, ghost piece
+    ScoreManager.cs     # Skóre, level, rychlost
+    GameState.cs        # Herní stav (Idle/Playing/Paused/GameOver)
+  Components/
+    TetrisGame.razor    # Hlavní komponenta, game loop (PeriodicTimer)
+    GameBoard.razor     # CSS Grid 10×20, ghost piece
+    Sidebar.razor       # Next piece, skóre, leaderboard
+    GameOverlay.razor   # Start / Pauza / Game Over overlay
+  wwwroot/
+    js/tetrisInterop.js # JS interop pro globální keyboard handling
+    css/tetris.css      # Dark theme, CSS Grid herní pole
+
+TetrisBlazor.Server/
+  Program.cs            # Minimal API + hostování Blazor WASM
 ```
+
