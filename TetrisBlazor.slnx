@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="TetrisBlazor.Client/TetrisBlazor.Client.csproj" />
+  <Project Path="TetrisBlazor.Server/TetrisBlazor.Server.csproj" />
+  <Project Path="TetrisBlazor.Shared/TetrisBlazor.Shared.csproj" />
+</Solution>
