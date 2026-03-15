@@ -61,7 +61,7 @@ class Renderer {
     for (let r = 0; r < shape.length; r++) {
       for (let c = 0; c < shape[r].length; c++) {
         if (shape[r][c]) {
-          this._drawBlock(this.nextCtx, offsetX + c, offsetY + r, color, BLOCK_SIZE - 2);
+          this._drawBlock(this.nextCtx, offsetX + c, offsetY + r, color);
         }
       }
     }

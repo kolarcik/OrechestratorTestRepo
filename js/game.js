@@ -88,6 +88,7 @@ class Game {
 
   gameLoop(timestamp) {
     if (this.state !== 'playing') return;
+    if (this.lastTime === 0) this.lastTime = timestamp;
     const delta = timestamp - this.lastTime;
     this.lastTime = timestamp;
     this.dropCounter += delta;
