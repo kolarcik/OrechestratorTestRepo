@@ -1,0 +1,79 @@
+@using TetrisBlazor.Client.GameLogic
+@using TetrisBlazor.Shared
+
+@if (Status != GameStatus.Playing)
+{
+    <div class="overlay">
+        @if (Status == GameStatus.Idle)
+        {
+            <h1 class="overlay-title">TETRIS</h1>
+            <p>Press ENTER to start</p>
+            <div class="controls-hint">
+                ← → Move &nbsp;|&nbsp; ↑/X Rotate CW &nbsp;|&nbsp; Z Rotate CCW<br />
+                ↓ Soft Drop &nbsp;|&nbsp; SPACE Hard Drop &nbsp;|&nbsp; P Pause
+            </div>
+            @if (Leaderboard.Count > 0)
+            {
+                <div class="lb-overlay">
+                    <div class="label">TOP SCORES</div>
+                    <ol>
+                        @foreach (var e in Leaderboard.Take(5))
+                        {
+                            <li>@e.Name &ndash; @e.Score</li>
+                        }
+                    </ol>
+                </div>
+            }
+        }
+        else if (Status == GameStatus.Paused)
+        {
+            <h1 class="overlay-title">PAUSED</h1>
+            <p>Press P to resume</p>
+        }
+        else if (Status == GameStatus.GameOver)
+        {
+            <h1 class="overlay-title">GAME OVER</h1>
+            <p>Score: @ScoreManager.Score</p>
+            <p>Level: @ScoreManager.Level &nbsp;|&nbsp; Lines: @ScoreManager.Lines</p>
+            @if (!_submitted)
+            {
+                <div class="submit-score">
+                    <input @bind="_playerName" maxlength="20" placeholder="Your name" class="name-input" />
+                    <button class="submit-btn" @onclick="Submit">Submit Score</button>
+                </div>
+            }
+            else
+            {
+                <p class="saved-msg">&#10003; Score saved!</p>
+            }
+            <p><small>Press ENTER to play again</small></p>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public GameStatus Status { get; set; }
+    [Parameter] public ScoreManager ScoreManager { get; set; } = default!;
+    [Parameter] public List<ScoreEntry> Leaderboard { get; set; } = [];
+    [Parameter] public EventCallback OnStart { get; set; }
+    [Parameter] public EventCallback<string> OnSubmitScore { get; set; }
+
+    private string _playerName = "";
+    private bool _submitted;
+
+    protected override void OnParametersSet()
+    {
+        if (Status is GameStatus.Idle or GameStatus.Playing)
+        {
+            _submitted = false;
+            _playerName = "";
+        }
+    }
+
+    private async Task Submit()
+    {
+        if (string.IsNullOrWhiteSpace(_playerName)) return;
+        _submitted = true;
+        await OnSubmitScore.InvokeAsync(_playerName.Trim());
+    }
+}

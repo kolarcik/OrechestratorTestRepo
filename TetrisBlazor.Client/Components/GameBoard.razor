@@ -1,0 +1,59 @@
+@using TetrisBlazor.Client.GameLogic
+
+<div class="game-board">
+    @for (int row = 0; row < Board.Rows; row++)
+    {
+        @for (int col = 0; col < Board.Cols; col++)
+        {
+            var r = row; var c = col;
+            var color = GetCellColor(r, c);
+            var isGhost = IsGhostCell(r, c);
+            <div class="cell @(color != null ? "filled" : "") @(isGhost ? "ghost" : "")"
+                 style="@(color != null ? $"background:{color};" : "") @(isGhost ? $"border-color:{GetPieceColor()};" : "")">
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public Board Board { get; set; } = default!;
+    [Parameter] public Tetromino? CurrentPiece { get; set; }
+    [Parameter] public int CurrentX { get; set; }
+    [Parameter] public int CurrentY { get; set; }
+
+    private int _ghostY;
+
+    protected override void OnParametersSet()
+    {
+        if (CurrentPiece is not null)
+            _ghostY = Board.GetGhostY(CurrentPiece.Shape, CurrentX, CurrentY);
+    }
+
+    private string? GetCellColor(int row, int col)
+    {
+        var locked = Board.GetCell(row, col);
+        if (locked != null) return locked;
+
+        if (CurrentPiece is null) return null;
+        int pr = row - CurrentY, pc = col - CurrentX;
+        if (pr >= 0 && pr < CurrentPiece.Shape.GetLength(0) &&
+            pc >= 0 && pc < CurrentPiece.Shape.GetLength(1) &&
+            CurrentPiece.Shape[pr, pc] != 0)
+            return CurrentPiece.Color;
+
+        return null;
+    }
+
+    private bool IsGhostCell(int row, int col)
+    {
+        if (CurrentPiece is null || _ghostY == CurrentY) return false;
+        int pr = row - _ghostY, pc = col - CurrentX;
+        if (pr >= 0 && pr < CurrentPiece.Shape.GetLength(0) &&
+            pc >= 0 && pc < CurrentPiece.Shape.GetLength(1) &&
+            CurrentPiece.Shape[pr, pc] != 0)
+            return GetCellColor(row, col) == null;
+        return false;
+    }
+
+    private string GetPieceColor() => CurrentPiece?.Color ?? "#fff";
+}
