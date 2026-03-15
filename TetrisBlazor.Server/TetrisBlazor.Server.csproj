@@ -11,4 +11,7 @@
     <ProjectReference Include="..\TetrisBlazor.Shared\TetrisBlazor.Shared.csproj" />
     <ProjectReference Include="..\TetrisBlazor.Client\TetrisBlazor.Client.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="TetrisBlazor.Tests.Server" />
+  </ItemGroup>
 </Project>
