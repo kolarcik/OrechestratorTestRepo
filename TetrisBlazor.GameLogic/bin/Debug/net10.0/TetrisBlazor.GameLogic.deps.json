@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "TetrisBlazor.GameLogic/1.0.0": {
+        "runtime": {
+          "TetrisBlazor.GameLogic.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TetrisBlazor.GameLogic/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
