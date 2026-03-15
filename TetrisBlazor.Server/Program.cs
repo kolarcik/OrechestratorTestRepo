@@ -47,10 +47,13 @@ app.MapPost("/api/scores", (ScoreSubmission submission) =>
         return Results.BadRequest(new { error = "score must be non-negative" });
     if (submission.Level < 1)
         return Results.BadRequest(new { error = "level must be >= 1" });
+    if (submission.Lines < 0)
+        return Results.BadRequest(new { error = "lines must be non-negative" });
 
+    var trimmedName = submission.Name.Trim();
     var entry = new ScoreEntry
     {
-        Name = submission.Name.Trim()[..Math.Min(20, submission.Name.Trim().Length)],
+        Name = trimmedName[..Math.Min(20, trimmedName.Length)],
         Score = submission.Score,
         Level = submission.Level,
         Lines = submission.Lines,
