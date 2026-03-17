@@ -1,28 +1,28 @@
-Task: Add test project to solution and implement Playwright E2E test (QA)
+Task: Implement Playwright E2E test and add project to solution (QA)
 
-Assignment (deliverable only):
-1) From branch team1/QA create feature branch: team1/QA/playwright-e2e.
-2) Create a new xUnit test project at repository root named TetrisBlazor.PlaywrightTests and add it to the solution:
+Deliverable (exact):
+1) Create feature branch from team1/QA named: team1/QA/playwright-e2e
+2) Create a root-level xUnit test project named TetrisBlazor.PlaywrightTests and add it to the solution:
    - dotnet new xunit -n TetrisBlazor.PlaywrightTests
    - dotnet sln add TetrisBlazor.PlaywrightTests/TetrisBlazor.PlaywrightTests.csproj
-3) Add Playwright and browsers:
+3) Add dependency and install browsers:
    - dotnet add TetrisBlazor.PlaywrightTests package Microsoft.Playwright
-   - Install browsers (local dev): playwright install
-4) Implement an E2E test that:
-   - Starts the server: dotnet run --project ./TetrisBlazor.Server --urls http://localhost:5000 (background from test setup).
-   - Waits for readiness (poll http://localhost:5000/ or a health endpoint) with timeout.
-   - Uses Microsoft.Playwright to launch Chromium, navigate to http://localhost:5000, and assert a main UI element (title or Start button).
-   - Stops the server and cleans up.
-5) Ensure the project's TargetFramework matches the solution (e.g., net6.0). Make tests runnable via: dotnet test
-6) Commit changes on team1/QA/playwright-e2e and open a PR to team1/QA with instructions including `playwright install` and how to run the tests.
+   - Run: playwright install (or document npm alternative) and provide a small script scripts/install-playwright.sh
+4) Implement E2E test(s):
+   - Start the server in test setup: dotnet run --project ./TetrisBlazor.Server --urls http://localhost:5000 (background) OR use WebApplicationFactory/TestServer
+   - Poll http://localhost:5000/ or /health until ready (timeout configurable)
+   - Use Microsoft.Playwright to launch Chromium, navigate to http://localhost:5000 and assert a stable UI selector (e.g., text=Start or h1)
+   - Ensure server process is terminated in teardown and avoid orphan processes
+5) Ensure project TargetFramework matches repo (e.g., net6.0) and tests run via: dotnet test
+6) Commit to team1/QA/playwright-e2e and open PR to team1/QA with run instructions and note about "playwright install".
 
 Acceptance criteria:
-- The test project is present in the repo and listed in the .sln.
-- dotnet test runs and the Playwright test passes locally.
+- Project exists at ./TetrisBlazor.PlaywrightTests and is added to the .sln
+- dotnet test executes the new tests and they pass locally
 
 Notes:
-- Prefer adding a small script or README note: scripts/install-playwright.sh or npm alternative for CI.
-- Keep lifecycle deterministic (fixed port, explicit shutdown).
+- Add scripts/install-playwright.sh and a README snippet for running tests and preparing CI.
+- Prefer Playwright wait-for selectors and deterministic waits; avoid global tool assumptions in CI.
 
 Context:
 - Repository: TetrisBlazor (Blazor app). Your branch: team1/QA. Work from a feature branch off team1/QA.

@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="TetrisBlazor.Client/TetrisBlazor.Client.csproj" />
+  <Project Path="TetrisBlazor.PlaywrightTests/TetrisBlazor.PlaywrightTests.csproj" />
   <Project Path="TetrisBlazor.Server/TetrisBlazor.Server.csproj" />
   <Project Path="TetrisBlazor.Shared/TetrisBlazor.Shared.csproj" />
   <Project Path="TetrisBlazor.Tests.Server/TetrisBlazor.Tests.Server.csproj" />
